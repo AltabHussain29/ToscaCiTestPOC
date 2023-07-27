@@ -1,18 +1,23 @@
-name: "Javascript code scan"
-on:
-  push:
-    branches: [main]
+name: GitHub Actions Tosca Test Integration
+run-name: ${{ github.actor }} is teting out GitHub Actions
+on: [push]
 jobs:
-  CodeQL-Build:
-    runs-on: ubuntu-latest
-    permissions:
-      security-events: write
+  Tosca-Test:
+    runs-on: [self-hosted, windows, x64]
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3.5.3
+      - name: Run Tosca Test
+        shell: cmd
+        run: |
+          "C:\Program Files (x86)\TRICENTIS\Tosca Testsuite\ToscaCommander\ToscaCI\Client\ToscaCIClient.exe" -m distributed -c "D:\Tosca_DevOPs_POC\ToscaCIEvent.xml" -r "D:\Tosca_DevOPs_POC\ToscaResult\testresult.xml"
+      - name: Test Summary
+        uses: test-summary/action@v2
+        if: always()
+        with:
+          paths: "D:/Tosca_DevOPs_POC/ToscaResult/test*.xml"
+          show: "all"
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v2
-
       - name: Autobuild
         uses: github/codeql-action/autobuild@v2
       - name: Perform CodeQL Analysis
