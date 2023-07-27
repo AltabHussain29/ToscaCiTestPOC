@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} is teting out GitHub Actions
 on: [push]
 jobs:
   Tosca-Test:
-    runs-on: [self-hosted, windows, x64]
+    runs-on: [self-hosted, windows, x64, altab]
     steps:
       - uses: actions/checkout@v3.5.3
       - name: Run Tosca Test
